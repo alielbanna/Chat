@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_starter/models/chat.dart';
@@ -24,11 +25,16 @@ class ChatInformation extends StatefulWidget {
 class _ChatInformationState extends State<ChatInformation> {
   bool enabled = false;
   String chatAdminName = "";
-  String chatAdminImage = "";
+  String chatAdminImage = "https://firebasestorage.googleapis.com/v0/b/faculty-chat.appspot.com/o/Profile-icon-9_0.png?alt=media&token=495c94b0-21a2-44f0-88e4-daf6f4652a5a";
+  String adminId = "";
+  String status = "true";
+  var myId = FirebaseAuth.instance.currentUser.uid;
   @override
   void initState() {
     FirebaseFirestore.instance.collection("Chats").doc(widget.chatID).get().then((value){
       chatAdminName = value["admin"];
+      status = value["status"];
+      adminId = value["adminId"];
       FirebaseFirestore.instance.collection("Users").where("name", isEqualTo: value["admin"]).get().then((user){
         setState(() {
           chatAdminImage = user.docs[0]["image"];
@@ -144,6 +150,63 @@ class _ChatInformationState extends State<ChatInformation> {
                             ),
                           ),
                         ),
+                        adminId == myId ? InkWell(
+                          onTap: (){
+                            FirebaseFirestore.instance.collection("Chats").doc(widget.chatID).update({
+                              "status" : status == "true" ? "false" : "true"
+                            }).then((value) {
+                              status == "true" ? status = "false" : status = "true";
+                              setState(() {
+                                
+                              });
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(bottom:10.0 , left: 20,right: 20),
+                            child: Column(
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.settings,
+                                      color: Colors.grey,
+                                      size: 27.0,
+                                    ),
+                                    SizedBox(
+                                      width: 10.0,
+                                    ),
+                                    Text(
+                                          'Admin Settings',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 19.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        ],
+                                ),
+                                SizedBox(height: 10,),
+                                Container(
+                                  width: 160,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: status == "true" ? Colors.red[700] : Colors.green[700]
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(status == "true" ? Icons.lock : Icons.query_builder,color: Colors.white,size: 18,),
+                                      SizedBox(width:6),
+                                      Text(status == "true" ? "Close The Chat" : "Open The Chat",style: TextStyle(color: Colors.white,fontSize: 15.0),),
+                                    ],
+                                  ),
+                                )
+                              ])
+                          ),
+                        ):Container(),
+                        SizedBox(height: 10,),
                         Padding(
                           padding: EdgeInsets.only(bottom:10.0 , left: 20,right: 20),
                           child: Column(
@@ -200,7 +263,7 @@ class _ChatInformationState extends State<ChatInformation> {
                                                         : Container();
                                                   });
                                             },
-                                          ),
+                                         ),
                                         ),
                                       ),
                                       SizedBox(height:5),
@@ -221,6 +284,7 @@ class _ChatInformationState extends State<ChatInformation> {
     );
   }
   Widget personInfo(String imageurl , String fullName){
+    print(imageurl);
     return Container(
       height: 60,
       width: MediaQuery.of(context).size.width*0.9,

@@ -3,7 +3,7 @@ import 'dart:math';
 
 
 import 'package:flowder/flowder.dart';
-import 'package:flutter_chat_ui_starter/services/alertsUsingToast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:path_provider/path_provider.dart';
 
 Future<String> getPathInExternalStorage() async {
@@ -26,18 +26,18 @@ saveNetworkImage(String url) async {
     try {
       final downloaderUtils = DownloaderUtils(
         progressCallback: (current, total) {
-          final progress = (current / total) * 100;
+          final progress = (current / total);
           print('Downloading: $progress');
+          EasyLoading.showProgress(progress , status: "Downloading ...");
         },
         file: File('$saveDir/${Random().nextInt(100000000)}.jpeg'),
         progress: ProgressImplementation(),
-        onDone: () => alertToast('Saved Successfully'),
+        onDone: () => EasyLoading.showSuccess('Saved Successfully',duration: Duration(milliseconds: 800)),
         deleteOnCancel: true,
       );
       final core = await Flowder.download('$url', downloaderUtils);
     } catch (e) {
-      
-      alertToast("Check Network");
+      EasyLoading.showInfo('Check Network',duration: Duration(milliseconds: 800));
     }
   });
 }
@@ -45,21 +45,22 @@ saveNetworkImage(String url) async {
 saveFile(String url , String ext) async {
   await getPathInExternalStorage().then((saveDir) async {
     try {
-      alertToast('Please Wait a moment ...');
+      //EasyLoading.show(status: "Uploading ...");
       final downloaderUtils = DownloaderUtils(
         progressCallback: (current, total) {
-          final progress = (current / total) * 100;
+          final progress = (current / total);
+          EasyLoading.showProgress(progress , status: "Downloading ...");
           print('Downloading: $progress');
         },
         file: File('$saveDir/${DateTime.now()}.$ext'),
         progress: ProgressImplementation(),
-        onDone: () => alertToast('Saved Successfully'),
+        onDone: () => EasyLoading.showSuccess('Saved Successfully',duration: Duration(milliseconds: 800)),
         deleteOnCancel: true,
       );
       final core = await Flowder.download('$url', downloaderUtils);
     } catch (e) {
       print(e);
-      alertToast("Check Network");
+      EasyLoading.showInfo('Check Network',duration: Duration(milliseconds: 800));
     }
   });
 }

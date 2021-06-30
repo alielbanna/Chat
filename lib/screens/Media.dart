@@ -111,7 +111,7 @@ class _MediaState extends State<Media> {
                   builder: (BuildContext context) => CupertinoAlertDialog(
                         title: Text('Download Folder'),
                         content: Text(
-                            'Do you want to Download this folder ?'),
+                            'Do you want to Download this file ?'),
                         actions: <Widget>[
                           CupertinoDialogAction(
                             child: Text('Cancel'),
@@ -157,8 +157,9 @@ class _MediaState extends State<Media> {
                         ):Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.all(1.0),
+                          padding: EdgeInsets.all(9),
                           color: Theme.of(context).accentColor,
-                          child: Text("$ext", style: TextStyle(color: Colors.white , fontSize: 17 , fontWeight: FontWeight.bold),)
+                          child: Text("$ext", style: TextStyle(color: Colors.white , fontSize: 13 , fontWeight: FontWeight.bold),)
                         );
 
 }

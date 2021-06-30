@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_starter/services/alertsUsingToast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -112,7 +113,7 @@ class _MessageDataState extends State<MessageData> {
                         if (await canLaunch(link.url)) {
                           await launch(link.url);
                         } else {
-                          alertToast('Could not launch $link');
+                          EasyLoading.showError('Could not launch $link',duration: Duration(milliseconds: 800));
                         }
                       },
                       enableInteractiveSelection: false,

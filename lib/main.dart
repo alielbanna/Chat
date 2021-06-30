@@ -8,6 +8,7 @@ import 'package:flutter_chat_ui_starter/screens/chat_screen.dart';
 import 'package:flutter_chat_ui_starter/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_chat_ui_starter/services/navigation_service.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
   //App's Ui 
@@ -29,6 +30,20 @@ void main() async {
         );
   runApp(MyApp());
 }
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true;
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -40,6 +55,7 @@ class MyApp extends StatelessWidget {
       ]);
     //Material App
     return MaterialApp(
+      builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         canvasColor: Colors.transparent,

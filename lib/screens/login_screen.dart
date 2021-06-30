@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_starter/animations/fade_animation.dart';
+import 'package:flutter_chat_ui_starter/services/permission.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_chat_ui_starter/providers/auth_provider.dart';
@@ -18,6 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   String password;
   AuthProvider _auth;
   bool showSpinner = false;
+  @override
+  void initState() {
+    permissionVoice(context);
+    permissionStorage(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -57,6 +57,7 @@ class AuthProvider extends ChangeNotifier {
       user = null;
       status = AuthStatus.Error;
       SnackBarService.instance.showSnackBarError('Error Authenticating!');
+      print(e);
     }
     notifyListeners();
   }

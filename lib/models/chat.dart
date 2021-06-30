@@ -39,8 +39,10 @@ class Chat {
   final List members;
   final List<Message> messages;
   final String admin;
+  final String adminId;
+  final String status;
 
-  Chat({this.id, this.members, this.admin, this.messages});
+  Chat({this.id, this.members, this.admin, this.messages,this.adminId,this.status});
 
   factory Chat.fromFirestore(DocumentSnapshot _snapshot) {
     var _data = _snapshot.data();
@@ -62,7 +64,10 @@ class Chat {
         id: _snapshot.id,
         members: _data['members'],
         admin: _data['admin'],
-        messages: _messages);
+        messages: _messages,
+        adminId: _data['adminId'],
+        status: _data["status"]
+        );
   }
 }
 

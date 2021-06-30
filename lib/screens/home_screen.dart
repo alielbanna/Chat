@@ -12,6 +12,7 @@ import 'package:flutter_chat_ui_starter/services/alertsUsingToast.dart';
 import 'package:flutter_chat_ui_starter/services/navigation_service.dart';
 import 'package:flutter_chat_ui_starter/widgets/category_selector.dart';
 import 'package:flutter_chat_ui_starter/providers/auth_provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_chat_ui_starter/services/database_service.dart';
 
@@ -257,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       text = '';
                                     });
                                     }else{
-                                      alertToast("Please Enter some Text");
+                                      EasyLoading.showInfo("Please Enter some Text",duration: Duration(milliseconds: 800));
                                     }
                                   },
                                 ),

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_chat_ui_starter/providers/auth_provider.dart';
 import 'package:flutter_chat_ui_starter/screens/photoView.dart';
 import 'package:flutter_chat_ui_starter/services/alertsUsingToast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_chat_ui_starter/models/contact.dart';
 import 'package:flutter_chat_ui_starter/services/database_service.dart';
@@ -136,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           .getImageFromLibrary()
                                           .then((_file) {
                                         if (_file != null) {
-                                          alertToast("please wait a moment ..");
+                                          EasyLoading.show(status: "uploading ...");
                                           CloudStorageService.instance
                                               .uploadMediaMessage(
                                                   _auth.user.uid, _file)
@@ -148,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   .updateProfilePhoto(
                                                       _url, _auth.user.uid)
                                                   .whenComplete(() =>
-                                                      alertToast("Success"));
+                                                      EasyLoading.showSuccess('Success',duration: Duration(milliseconds: 800)));
                                             });
                                           });
                                         }

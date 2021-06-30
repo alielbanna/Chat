@@ -53,7 +53,7 @@ class DatabaseService {
   }
   Future updateSeenMessage(String chatId , String _uid){
     _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").get().then((value) {
-      if (value.exists) {
+      if (value.data().containsKey("listSeen")) {
         Map<String , int> seen = Map.from(value["listSeen"]);
         Map<String , int> newMap = {};
         seen.forEach((k , v) {
@@ -63,7 +63,7 @@ class DatabaseService {
             newMap.putIfAbsent(k, () => 0);
           }
         });
-        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").set({
+        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").update({
               "listSeen" : newMap
            });
       }else{
@@ -85,7 +85,7 @@ class DatabaseService {
       }
     });
   }
-  Future setSeenMessage(String chatId , String _uid){
+  Future setCounterMessage(String chatId , String _uid){
     _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").get().then((value) {
       if (value.exists) {
         Map<String , int> seen = Map.from(value["listSeen"]);
@@ -96,10 +96,31 @@ class DatabaseService {
           }
         });
         newMap.putIfAbsent(_uid, () => 0);
-        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").set({
+        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").update({
               "listSeen" : newMap
         });
       }
+    });
+  }
+  Future setSeenMessage(String chatId , String _uid){
+    _database.collection(_chatsCollection).doc(chatId).get().then((value){
+      List messages = value["messages"];
+      int len = messages.length-1;
+    _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").get().then((value) {
+      if (value.data().containsKey("seenMessage")) {
+        Map<String , int> seen = Map.from(value["seenMessage"]);
+            seen.update(_uid, (value) => len , ifAbsent: ()=> len);
+        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").update({
+              "seenMessage" : seen
+        });
+      }else{
+         Map<String , int> seen = {};
+         seen.update(_uid, (value) => len , ifAbsent: ()=> len);
+        _database.collection(_chatsCollection).doc(chatId).collection("seen").doc("main").update({
+              "seenMessage" : seen
+        });
+      }
+    });
     });
   }
 

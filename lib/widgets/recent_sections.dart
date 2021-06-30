@@ -285,11 +285,15 @@ class RecentSections extends StatelessWidget {
                                                       child: StreamBuilder(
                                                           stream:FirebaseFirestore.instance.collection("Chats").doc(_data[_index].chatID).collection("seen").doc("main").snapshots(),
                                                           builder: (context, _snapshot) {
+                                                          switch (_snapshot.connectionState) {
+                                                          case ConnectionState.waiting: return Center(
+                                                            child: Center(child: Container())
+                                                          );
+                                                          default:
                                                           Map<String,int> seenCount = {};
                                                           var auth = FirebaseAuth.instance.currentUser.uid;
-                                                          if (_snapshot.hasData) {
+                                                          if (_snapshot.data.data().containsKey("listSeen")) {
                                                             seenCount = Map.from(_snapshot.data["listSeen"]);
-                                                          }
                                                           return _snapshot.hasData && seenCount[auth] > 0 ? Container(
                                                           alignment: Alignment.center,
                                                           width: 27,
@@ -304,7 +308,9 @@ class RecentSections extends StatelessWidget {
                                                             fontSize: 12.0,
                                                           )),
                                                         ):Container();
+                                                        }else{return Container();}
                                                           }
+                                                        }
                                                       ),
                                                     ),
 

@@ -1,8 +1,8 @@
 
 import 'dart:io';
 
-import 'package:flutter_chat_ui_starter/services/alertsUsingToast.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 Future<File> pickFile()async{
   final path = await FlutterDocumentPicker.openDocument();
@@ -11,7 +11,7 @@ if(path != null) {
    print(file.path);
    return file;
 } else {
-   alertToast("no file picked");
+   EasyLoading.showInfo("no file picked",duration: Duration(milliseconds: 800));
    return null;
 }
 }
